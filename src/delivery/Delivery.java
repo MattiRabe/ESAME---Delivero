@@ -11,6 +11,7 @@ public class Delivery {
 
 	TreeMap<String, LinkedList<Restaurant>> categoriesAndRestaurants = new TreeMap<>();
 	TreeMap<String, Restaurant> restaurants = new TreeMap<>();
+	TreeMap<String, LinkedList<Dish>> dishesForRestaurant = new TreeMap<>();
 
 
 	// R1
@@ -48,6 +49,8 @@ public class Delivery {
 		Restaurant r = new Restaurant(name, category);
 		restaurants.put(r.getName(), r);
 		categoriesAndRestaurants.get(category).add(r);
+		LinkedList<Dish> l = new LinkedList<>();
+		dishesForRestaurant.put(name, l);
 	}
 	
 	/**
@@ -75,6 +78,10 @@ public class Delivery {
 	 * @throws DeliveryException if the dish name already exists
 	 */
 	public void addDish(String name, String restaurantName, float price) throws DeliveryException {
+		for(Dish d : dishesForRestaurant.get(restaurantName)){
+			if(d.getName().equals(name)) throw new DeliveryException();
+		}
+		dishesForRestaurant.get(restaurantName).add(new Dish(name, price, restaurants.get(restaurantName)));
 	}
 	
 	/**
@@ -87,7 +94,9 @@ public class Delivery {
 	 * @return map restaurant -> dishes
 	 */
 	//public Map<String,List<String>> getDishesByPrice(float minPrice, float maxPrice) {
-    //    return null;
+    //    return dishesForRestaurant.values().stream().flatMap(LinkedList::stream)
+	//	.filter(d->d.getPrice()>=minPrice && d.getPrice()<=maxPrice)
+	//	.collect(Collectors.groupingBy(Dish::getRestaurantName, TreeMap::new, Collectors.mapping(Dish::getName, Collectors.toList())));
 	//}
 	
 	/**
@@ -99,7 +108,9 @@ public class Delivery {
 	 * @return alphabetically sorted list of dish names 
 	 */
 	public List<String> getDishesForRestaurant(String restaurantName) {
-        return null;
+        return dishesForRestaurant.values().stream().flatMap(LinkedList::stream)
+		.filter(d->d.getRestaurantName().equals(restaurantName)).sorted(Comparator.comparing(Dish::getName))
+		.map(Dish::getName).collect(Collectors.toList());
 	}
 	
 	/**
@@ -111,7 +122,8 @@ public class Delivery {
 	 * @return 
 	 */
 	public List<String> getDishesByCategory(String category) {
-        return null;
+        return dishesForRestaurant.values().stream().flatMap(LinkedList::stream)
+		.filter(d->d.getRestaurant().getCategory().equals(category)).map(Dish::getName).collect(Collectors.toList());
 	}
 	
 	//R3

@@ -1,10 +1,18 @@
 package delivery;
 
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 
 public class Delivery {
+
+	TreeMap<String, LinkedList<Restaurant>> categoriesAndRestaurants = new TreeMap<>();
+	TreeMap<String, Restaurant> restaurants = new TreeMap<>();
+
+
 	// R1
 	
     /**
@@ -14,6 +22,9 @@ public class Delivery {
      * @throws DeliveryException if the category is already available.
      */
 	public void addCategory (String category) throws DeliveryException {
+		if(!categoriesAndRestaurants.containsKey(category)) throw new DeliveryException();
+		LinkedList<Restaurant> l = new LinkedList<>();
+		categoriesAndRestaurants.put(category, l);
 	}
 	
 	/**
@@ -22,7 +33,7 @@ public class Delivery {
 	 * @return list of category names
 	 */
 	public List<String> getCategories() {
-		return null;
+		return categoriesAndRestaurants.keySet().stream().collect(Collectors.toList());
 	}
 	
 	/**
@@ -33,6 +44,10 @@ public class Delivery {
 	 * @throws DeliveryException if the category is not defined.
 	 */
 	public void addRestaurant (String name, String category) throws DeliveryException {
+		if(!categoriesAndRestaurants.containsKey(category)) throw new DeliveryException();
+		Restaurant r = new Restaurant(name, category);
+		restaurants.put(r.getName(), r);
+		categoriesAndRestaurants.get(category).add(r);
 	}
 	
 	/**
@@ -44,7 +59,8 @@ public class Delivery {
 	 * @return sorted list of restaurant names
 	 */
 	public List<String> getRestaurantsForCategory(String category) {
-        return null;
+		return restaurants.values().stream().filter(r->r.getCategory().equals(category))
+		.sorted(Comparator.comparing(Restaurant::getName)).map(Restaurant::getName).collect(Collectors.toList());
 	}
 	
 	// R2

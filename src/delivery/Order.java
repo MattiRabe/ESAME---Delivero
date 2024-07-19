@@ -8,18 +8,18 @@ public class Order {
     private String dishname[];
     private int quantity[];
     private String customerName;
-    private String restaurantName;
+    private Restaurant restaurant;
     private int deliveryTime;
     private int deliveryDistance;
     private Boolean delivered;
     
 
-    public Order(String[] dishname, int[] quantity, String customerName, String restaurantName,
+    public Order(String[] dishname, int[] quantity, String customerName, Restaurant res,
             int deliveryTime, int deliveryDistance) {
         this.dishname = dishname;
         this.quantity = quantity;
         this.customerName = customerName;
-        this.restaurantName = restaurantName;
+        this.restaurant = res;
         this.deliveryTime = deliveryTime;
         this.deliveryDistance = deliveryDistance;
         this.number= INCREMENT + baseCard++;
@@ -35,8 +35,8 @@ public class Order {
     public String getCustomerName() {
         return customerName;
     }
-    public String getRestaurantName() {
-        return restaurantName;
+    public Restaurant getRestaurant() {
+        return restaurant;
     }
     public int getDeliveryTime() {
         return deliveryTime;

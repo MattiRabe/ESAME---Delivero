@@ -3,6 +3,7 @@ package delivery;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -94,11 +95,11 @@ public class Delivery {
 	 * @param maxPrice  maximum price (included)
 	 * @return map restaurant -> dishes
 	 */
-	//public Map<String,List<String>> getDishesByPrice(float minPrice, float maxPrice) {
-    //    return dishesForRestaurant.values().stream().flatMap(LinkedList::stream)
-	//	.filter(d->d.getPrice()>=minPrice && d.getPrice()<=maxPrice)
-	//	.collect(Collectors.groupingBy(Dish::getRestaurantName, TreeMap::new, Collectors.mapping(Dish::getName, Collectors.toList())));
-	//}
+	public Map<String,List<String>> getDishesByPrice(float minPrice, float maxPrice) {
+        return dishesForRestaurant.values().stream().flatMap(LinkedList::stream)
+		.filter(d->d.getPrice()>=minPrice && d.getPrice()<=maxPrice)
+		.collect(Collectors.groupingBy(Dish::getRestaurantName, TreeMap::new, Collectors.mapping(Dish::getName, Collectors.toList())));
+	}
 	
 	/**
 	 * retrieve the ordered list of the names of dishes sold by a restaurant. 
@@ -146,7 +147,7 @@ public class Delivery {
 	 * @return order ID
 	 */
 	public int addOrder(String dishNames[], int quantities[], String customerName, String restaurantName, int deliveryTime, int deliveryDistance) {
-	    Order o = new Order(dishNames, quantities, customerName, restaurantName, deliveryTime, deliveryDistance);
+	    Order o = new Order(dishNames, quantities, customerName, restaurants.get(restaurantName), deliveryTime, deliveryDistance);
 		orders.put(o.getNumber(), o);
 		return o.getNumber();
 	}
@@ -217,9 +218,11 @@ public class Delivery {
 	 * 
 	 * @return map category -> order count
 	 */
-	//public Map<String,Long> ordersPerCategory() {
-      //  return null;
-	//}
+	public Map<String,Long> ordersPerCategory() {
+		Map<String,Long> res = orders.values().stream()
+		.collect(Collectors.groupingBy(o->o.getRestaurant().getCategory(), Collectors.counting()));
+		return res;
+	}
 	
 	/**
 	 * retrieves the name of the restaurant that has received the higher average rating.
@@ -227,6 +230,15 @@ public class Delivery {
 	 * @return restaurant name
 	 */
 	public String bestRestaurant() {
-        return null;
+		Double bestValue=0.0;
+		Restaurant br = new Restaurant(null, null);
+
+		for(Restaurant r : restaurants.values()){
+			if(r.getAverage()>bestValue){
+				bestValue=r.getAverage();
+				br=r;
+			}
+		}
+        return br.getName();
 	}
 }

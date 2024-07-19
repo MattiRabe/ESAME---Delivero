@@ -59,7 +59,7 @@ public void testAll() throws DeliveryException {
     d.setRatingForRestaurant("La trattoria", 3);
     assertEquals("Sol levante",d.restaurantsAverageRating().get(0));
     
-    R5
+    //R5
     assertEquals(Long.valueOf(2), d.ordersPerCategory().get("Chinese"));
     
 }

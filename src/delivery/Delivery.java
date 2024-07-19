@@ -192,6 +192,8 @@ public class Delivery {
 	 * @param rating           rating
 	 */
 	public void setRatingForRestaurant(String restaurantName, int rating) {
+		if(rating<0 || rating>5) return;
+		restaurants.get(restaurantName).addRating(rating);
 	}
 	
 	/**
@@ -203,7 +205,9 @@ public class Delivery {
 	 * @return ordered list of restaurant names
 	 */
 	public List<String> restaurantsAverageRating() {
-        return null;
+        return restaurants.values().stream().filter(r->r.getAverage()>0.0)
+		.sorted(Comparator.comparing(Restaurant::getAverage).reversed()).map(Restaurant::getName)
+		.collect(Collectors.toList());
 	}
 	
 	//R5

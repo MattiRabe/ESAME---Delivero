@@ -22,7 +22,7 @@ public class Delivery {
      * @throws DeliveryException if the category is already available.
      */
 	public void addCategory (String category) throws DeliveryException {
-		if(!categoriesAndRestaurants.containsKey(category)) throw new DeliveryException();
+		if(categoriesAndRestaurants.containsKey(category)) throw new DeliveryException();
 		LinkedList<Restaurant> l = new LinkedList<>();
 		categoriesAndRestaurants.put(category, l);
 	}
@@ -86,9 +86,9 @@ public class Delivery {
 	 * @param maxPrice  maximum price (included)
 	 * @return map restaurant -> dishes
 	 */
-	public Map<String,List<String>> getDishesByPrice(float minPrice, float maxPrice) {
-        return null;
-	}
+	//public Map<String,List<String>> getDishesByPrice(float minPrice, float maxPrice) {
+    //    return null;
+	//}
 	
 	/**
 	 * retrieve the ordered list of the names of dishes sold by a restaurant. 
@@ -193,9 +193,9 @@ public class Delivery {
 	 * 
 	 * @return map category -> order count
 	 */
-	public Map<String,Long> ordersPerCategory() {
-        return null;
-	}
+	//public Map<String,Long> ordersPerCategory() {
+      //  return null;
+	//}
 	
 	/**
 	 * retrieves the name of the restaurant that has received the higher average rating.

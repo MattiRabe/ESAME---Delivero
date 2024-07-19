@@ -6,13 +6,16 @@ public class Order {
 
     private Integer number;
     private String dishname[];
-    private Integer quantity[];
+    private int quantity[];
     private String customerName;
     private String restaurantName;
+    private int deliveryTime;
+    private int deliveryDistance;
+    private Boolean delivered;
     
 
-    public Order(String[] dishname, Integer[] quantity, String customerName, String restaurantName,
-            Integer deliveryTime, Integer deliveryDistance) {
+    public Order(String[] dishname, int[] quantity, String customerName, String restaurantName,
+            int deliveryTime, int deliveryDistance) {
         this.dishname = dishname;
         this.quantity = quantity;
         this.customerName = customerName;
@@ -20,16 +23,13 @@ public class Order {
         this.deliveryTime = deliveryTime;
         this.deliveryDistance = deliveryDistance;
         this.number= INCREMENT + baseCard++;
+        this.delivered=false;
     }
-
-
-    private Integer deliveryTime;
-    private Integer deliveryDistance;
 
     public String[] getDishname() {
         return dishname;
     }
-    public Integer[] getQuantity() {
+    public int[] getQuantity() {
         return quantity;
     }
     public String getCustomerName() {
@@ -38,12 +38,23 @@ public class Order {
     public String getRestaurantName() {
         return restaurantName;
     }
-    public Integer getDeliveryTime() {
+    public int getDeliveryTime() {
         return deliveryTime;
     }
-    public Integer getDeliveryDistance() {
+    public int getDeliveryDistance() {
         return deliveryDistance;
     }
 
+    public Integer getNumber() {
+        return number;
+    }
+
+    public Boolean isDelivered(){
+        return delivered;
+    }
+
+    public void setDelivered(){
+        this.delivered=true;
+    }
     
 }

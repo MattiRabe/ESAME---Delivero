@@ -12,6 +12,7 @@ public class Delivery {
 	TreeMap<String, LinkedList<Restaurant>> categoriesAndRestaurants = new TreeMap<>();
 	TreeMap<String, Restaurant> restaurants = new TreeMap<>();
 	TreeMap<String, LinkedList<Dish>> dishesForRestaurant = new TreeMap<>();
+	TreeMap<Integer, Order> orders = new TreeMap<>();
 
 
 	// R1
@@ -145,7 +146,9 @@ public class Delivery {
 	 * @return order ID
 	 */
 	public int addOrder(String dishNames[], int quantities[], String customerName, String restaurantName, int deliveryTime, int deliveryDistance) {
-	    return -1;
+	    Order o = new Order(dishNames, quantities, customerName, restaurantName, deliveryTime, deliveryDistance);
+		orders.put(o.getNumber(), o);
+		return o.getNumber();
 	}
 	
 	/**
@@ -164,7 +167,12 @@ public class Delivery {
 	 * @return list of order IDs
 	 */
 	public List<Integer> scheduleDelivery(int deliveryTime, int maxDistance, int maxOrders) {
-        return null;
+		List<Integer> l = orders.values().stream().sorted(Comparator.comparing(Order::getNumber))
+		.filter(o->o.getDeliveryTime()==deliveryTime && o.getDeliveryDistance()<=maxDistance && o.isDelivered()==false)
+		.limit(maxOrders).map(Order::getNumber).collect(Collectors.toList());
+
+		for(Integer n : l) orders.get(n).setDelivered(); 
+        return l;
 	}
 	
 	/**
@@ -172,7 +180,7 @@ public class Delivery {
 	 * @return the unassigned orders count
 	 */
 	public int getPendingOrders() {
-        return -1;
+        return (int)orders.values().stream().filter(o->o.isDelivered()==false).count();
 	}
 	
 	// R4
